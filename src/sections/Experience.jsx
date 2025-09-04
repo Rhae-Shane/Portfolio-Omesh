@@ -220,9 +220,18 @@ const Experience = () => {
             <div key={experience.id} ref={addToRefs} className="group">
               {/* Accordion Header */}
               <div
-                className="flex justify-between items-start py-6 cursor-pointer transition-colors duration-300 rounded-lg"
-                onMouseEnter={() => toggleAccordion(experience.id)}
-              >
+                  onMouseEnter={() => {
+                    setTimeout(() => {
+                      toggleAccordion(experience.id);
+                    }, 400); // 300ms delay
+                  }}
+                  onMouseLeave={() => {
+                    setTimeout(() => {
+                      toggleAccordion(null); // or however you handle closing
+                    }, 400); // optional delay for closing
+                  }}
+                  className="accordion-item cursor-pointer"
+                >
                 {/* Left Side - Role */}
                 <div className="flex items-center gap-4">
                   <h3 className="text-lg md:text-3xl text-white group-hover:text-blue-400 transition-colors duration-300">
