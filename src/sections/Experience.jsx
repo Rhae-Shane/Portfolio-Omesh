@@ -221,7 +221,7 @@ const Experience = () => {
               {/* Accordion Header */}
               <div
                 className="flex justify-between items-start py-6 cursor-pointer transition-colors duration-300 rounded-lg"
-                onClick={() => toggleAccordion(experience.id)}
+                onMouseEnter={() => toggleAccordion(experience.id)}
               >
                 {/* Left Side - Role */}
                 <div className="flex items-center gap-4">
