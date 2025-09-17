@@ -44,7 +44,7 @@ const Footer = () => {
               </p>
             </a>
             <a
-              href="https://drive.google.com/"
+              href="https://drive.google.com/file/d/1mnzX8v5SFz7llZeNAA62iS9-MC5sgbcS/view?usp=sharing"
               target="_blank"
               rel="noopener noreferrer"
               className="w-full sm:w-auto bg-white text-black px-4 sm:px-6 md:px-8 py-3 md:py-4 rounded-full font-medium cursor-pointer flex items-center gap-2 justify-center hover:bg-gray-100 transition-all duration-300"

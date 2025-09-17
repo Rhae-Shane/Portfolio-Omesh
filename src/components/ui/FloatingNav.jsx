@@ -33,7 +33,7 @@ const FloatingNav = ({ aboutPicture = null }) => {
       id: "resume",
       icon: FileText,
       label: "Resume",
-      href: "https://drive.google.com/file/",
+      href: "https://drive.google.com/file/d/1mnzX8v5SFz7llZeNAA62iS9-MC5sgbcS/view?usp=sharing",
       external: true,
     },
     {
