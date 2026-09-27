@@ -1,0 +1,305 @@
+---
+title: "Proof of work"
+description: "A comprehensive overview of my professional journey and experiences"
+---
+
+> I like taking messy learning and investing problems and turning them into products people actually finish using — on mobile, on the web, and in the AI layer underneath.
+
+<RoleHeading title="Mobile Engineer Intern (Fullstack) at SuperKalam" date="Jul 2026 - Present" />
+
+#### Features
+
+- **Stories** — Home on app + same Rive player on web
+- **DNA** — Gemini OCR → LLM summary → Strapi → WeasyPrint PDFs
+
+<DnaPipeline />
+- **Learn / quizzes / PYQs** — web dashboard on the same APIs as the app
+- **Chat image RAG** — insert (S3 + Qdrant) / extract into the answer; internal coverage tool
+
+<ImageRagPipeline />
+
+<TechStack items="React Native, Next.js, Typescript, Python, WeasyPrint, Amazon S3, Qdrant, Gemini, CloudFront" />
+
+<LinesBG />
+
+<RoleHeading title="AI Engineer Intern at Homi" date="Jul 2026 - Present" />
+
+Homi (by SuperKalam) is an AI companion for school maths. I work on the evaluation and retrieval pipelines.
+
+- Developed AI pipelines for the Red Pen system — evaluate handwritten Maths solutions and generate contextual feedback
+
+<HomiRedPenPipeline />
+
+- Implemented RAG pipelines for Maths content so retrieval stays curriculum-aware and solutions stay step-by-step
+
+<HomiRagPipeline />
+
+<HomiLangGraphPipeline />
+
+<TechStack items="Python, LangGraph, RAG, PostgreSQL, Gemini" />
+
+<LinesBG />
+
+<RoleHeading title="Founding Engineer at Validd" date="Dec 2025 - Jul 2026" />
+
+Validd ([validd.in](https://validd.in)) is a SEBI-registered investment advisor. I was founding engineer across the mobile app, the web apps, the LangGraph advisor, admin, payments, and the data jobs underneath. The business reached 120K MRR within 3 months, with 73K+ monthly AI interactions.
+
+The product is four advisory surfaces: managed portfolios, stock baskets, equity tips, and F&O tips — plus an AI chat advisor on top.
+
+#### Mobile app
+
+React Native / Expo app on [Play Store](https://play.google.com/store/apps/details?id=in.validd.app) and [App Store](https://apps.apple.com/app/id6756005142).
+
+- Home: Nifty and Sensex bar, buy/sell/hold search, and hubs for Wealth Portfolio, Equity Tips, and F&O Tips
+- Stock, ETF, and mutual-fund detail pages with historical pagination
+- F&O live trades: legs, entry/exit, points, quantity, and net P&L
+- Portfolio: value vs Nifty, increase / buy / decrease / exit advisory, allocation donut (stocks, MFs, ETFs, cash), and holdings
+- Alerts feed with search and filters; each alert opens a take-action sheet
+- AI advisor chat: text, speech-to-text, video messages, inline player, and a listening equalizer
+- Payments through Cashfree autopay, then KYC in DigiLocker
+- Deep links for F&O trades, search, channels, and content; install attribution from Play Install Referrer, Apple Search Ads, and UTMs, synced on login
+- PostHog (session replay + touch) and Sentry
+
+#### Web and Turborepo
+
+I migrated the whole frontend from a single Next.js repo into a Turbo monorepo. The old layout broke once we split apps — shared packages, env, native bindings, and deploy all assumed one Next output.
+
+<ValiddTurboSplit />
+
+<ValiddDeployPipeline />
+
+Four apps now: marketing, blogs, deeplinks, and the investor dashboard, plus shared packages for common, db, ui, and the ESLint / TypeScript / Tailwind configs.
+
+- Next only reads env from each app folder, not the repo root — the build script copies the root env into every app first
+- The lockfile was made on Windows, so Linux runners missed optional natives — a CI script installs them
+- Four parallel Next builds OOM'd the self-hosted runner — Turbo concurrency is 1 on deploy
+- Local gateway on port 3000 matches production nginx so home, blog, dashboard, and universal links feel like one site
+- Server routes I wired: /api proxy to the Express backend (no CORS), Groww/SIF handlers kept off that proxy, and Strapi revalidate for blogs
+- ESLint 9 flat config across apps and shared packages; Vitest through Turbo; CI is lint → typecheck → test
+
+#### Deploy (self-hosted)
+
+I set the deploy up myself. PM2 used to serve from the GitHub Actions workspace, so checkout deleted the live Next output mid-deploy.
+
+- Live tree sits next to home, not in the Actions workspace. The Action builds, then a release script atomically swaps node_modules, packages, and the Next output, then PM2 reload
+- Workflows: all-four or single-app, on beta and prod runners
+- PM2 runs the four apps: static, blogs, deeplink, dashboard
+- First cutover is a full four-app deploy; later updates can ship one app
+
+Product work on those apps:
+
+- Marketing site: OTP login, app showcase, advisor demo, testimonials, FAQs, and SEBI/legal pages
+- Investor dashboard aligned with the mobile home
+- Live [SIF tracker](https://validd.in/specialized-investment-fund-tracker) — NAVs and returns, with a live-API fallback to cached JSON
+- Stock-tips ads landing with login-gated equity plans
+- SIP, lumpsum, and CAGR calculators
+- SEO: JSON-LD, canonicals, and 301s for renamed routes
+- PostHog + Microsoft Clarity
+
+#### Self-hosted Novu push
+
+Cut over from OneSignal to a self-hosted Novu. Runtime push is Novu-only.
+
+<ValiddNovuPipeline />
+
+- FCM data messages (not notification payloads) so Android does not draw a grey tray icon; the app renders through Notifee with the Validd icon and a trade sound
+- Subscribers get Equity / Portfolio / F&O tags. Topic membership updates on every plan change: premium stock, free, portfolio, F&O, all-subscriptions, plus active / engaged / inactive
+- Admin still speaks the old OneSignal segment names; the API maps them to Novu topics so broadcast and segment-push screens did not have to be rewritten
+- A stock-alert workflow replaced the OneSignal broadcast. Device tokens cap at 100 per subscriber
+- STOCKSYNC market alerts and the AI service also fire through the same Novu topics
+- OneSignal stays unlinked as a reference; the cutover scripts inspect subscribers and drop import-only records
+
+#### Self-hosted Strapi
+
+Self-hosted Strapi 5 on our own box, not Strapi Cloud.
+
+- Postgres, Node 20, PM2, self-hosted on our own box
+- GitHub Actions on a self-hosted runner: write env, build, then PM2 reload Strapi
+- Users-permissions plugin; LF line endings and executable deploy scripts so the runner does not break on Windows checkouts
+
+#### AI advisor
+
+LangGraph service in TypeScript, listening on Supabase realtime channels.
+
+<ValiddAdvisorPipeline />
+
+- Router intents: greeting, stock question, web search, proprietary research, off-topic
+- Tools: top NSE ideas and Multyfi candles, with a live market snapshot if candles fail
+- Last 24 hours of channel messages as memory, so follow-ups stay coherent without LangGraph checkpoint memory
+- Unpaid users hit a paywall with rotating voice clips
+- AI trade alerts go out through Novu, same branding as the rest of push
+- LangSmith for traces
+
+#### Admin CRM
+
+Internal Next.js app for the sales and research desk.
+
+- Staff seats: admin, manager, sales — nested lead ownership, not all-or-nothing admin
+- Leads CRM with UTM, click IDs, store attribution, and ads match-quality
+- Users by state and timeline; team activity and payment analytics
+- Stock / F&O / portfolio notification consoles, plus broadcast and segment push (Novu under the old OneSignal shape)
+- Portfolio strategies, questions, version prepare / compare / release
+- Payments, stories, AI chat channels, and a health page
+
+#### Payments, KYC, and data
+
+<ValiddPayKycPipeline />
+
+<ValiddDataPipeline />
+
+- Cashfree orders, subscriptions, multi-autopay, and reconcile jobs
+- Premium fulfillment is idempotent so a webhook retry cannot double-extend a plan
+- After payment: KYC + DigiLocker, then Novu tags update so the next push lands in the right topic
+- Supabase migrations for subscriptions, staff seats, and active-days
+- Crons: LTP + MF NAVs, portfolio performance, strategy backfills, stock analysis from daily candles, Groq/OpenAI engagement pushes
+- Slack alerts and Sentry on the API; PROD-to-BETA clone script with a schema safety check
+
+<TechStack items="React Native, Expo, Next.js, Typescript, Node.js, LangGraph, LangSmith, Supabase, PostgreSQL, Novu, FCM, Notifee, Strapi, Cashfree, PostHog, Sentry, Docker, PM2, Turbo" />
+
+<LinesBG />
+
+<RoleHeading title="Software Engineer Intern at Multyfi" date="Dec 2024 - Oct 2025" />
+
+Investor-facing work on a platform with 75K+ downloads.
+
+- Designed stock recommendation strategies and investor-facing features
+- Delivered real-time market data, recommendation delivery, and notification workflows for equity, derivatives, and commodity trading
+
+<TechStack items="React.js, Node.js, REST APIs, Redis" />
+
+<LinesBG />
+
+<RoleHeading title="Software Engineer Intern at VIR Bike" date="Jul 2024 - Nov 2024" />
+
+Launched the company website and WhatsApp chatbot for bike purchases, order tracking, CRM, support, and payments — work that contributed to a 7 Cr funding round.
+
+<TechStack items="React.js, Tailwind CSS, Node.js, Express.js, REST APIs" />
+
+<LinesBG />
+
+<RoleHeading title="Campus Ambassador at Microsoft GroupMe" date="Feb 2025 - Apr 2025" />
+
+Represented Microsoft GroupMe on campus.
+
+- Promoted the platform and drove awareness and adoption among students
+- Ran technical workshops and info sessions on product features
+- Worked with peers and faculty to bring GroupMe into student communities
+- Practiced leadership, public speaking, and technical advocacy
+
+<LinesBG />
+
+<RoleHeading title="Technical Design Intern at KVtek" date="Jun 2024 - Jul 2024" />
+
+On-site hardware internship — left off the one-page resume, kept here in full.
+
+- Designed and optimized PCB layouts in Altium, Eagle, and KiCad
+- Wrote microcontroller logic in Embedded C and Arduino
+- Prototyped and tested PCB + firmware integration
+- Produced technical schematics and documentation for engineering and R&D
+
+<TechStack items="C++, Python, Git" />
+
+<LinesBG />
+
+<GitHubGraph username="Rhae-Shane" profileSrc="/pfp.jpg" scrollFade />
+
+<LinesBG />
+
+## Projects
+
+**Gigsfield** — [Live](https://gigsfield.com)
+
+AI creative workflow platform. Next.js + xyflow canvas on the front; AWS Step Functions + Lambda engine on the back. Flux / Veo / Kling / Gemini nodes, Clerk workspaces, Razorpay credits, CSV campaigns.
+
+<GigsfieldPipeline />
+
+<GigsfieldCreditsPipeline />
+
+<TechStack items="Next.js, React Flow, AWS, Step Functions, DynamoDB, Clerk, Razorpay" />
+
+**Echosphere**
+
+AI property platform for residents, owners, and technicians. Voice and chat become structured tickets through Gemini, then route to the matching trade with WhatsApp updates.
+
+<EchospherePipeline />
+
+<TechStack items="React.js, Express.js, PostgreSQL, Prisma, Gemini, WhatsApp" />
+
+**ProspectLens** — [GitHub](https://github.com/Rhae-Shane/ProspectLens)
+
+Sales research copilot. LangGraph planner fans queries across six providers in parallel, hybrid QC recovers gaps, then a 10-section report fans out again.
+
+<ProspectLensPipeline />
+
+<ProspectLensReportFanout />
+
+<TechStack items="React.js, Typescript, FastAPI, PostgreSQL, Redis, LangGraph, Firecrawl, OpenAI" />
+
+**HobbyFlow** — [App](https://github.com/Rhae-Shane/Hobbyflow-app) · [Backend](https://github.com/Rhae-Shane/Hobbyflow-backend)
+
+Creation chat → Groq / OpenRouter / Gateway plan cascade → just-in-time multimedia lessons. Ask tools and lazy daily tasks on Supabase JWT + RLS.
+
+<HobbyFlowPipeline />
+
+<HobbyFlowLessonPipeline />
+
+<TechStack items="React Native, Expo, TanStack Query, LangGraph, Groq, Supabase, PostgreSQL" />
+
+**Pull-Quest** — [GitHub](https://github.com/Rhae-Shane/Aptos-PullQuest-Frontend)
+
+Ranking-based open-source contribution platform so recruiters and maintainers see real code quality, not just PR counts.
+
+<PullQuestPipeline />
+
+<TechStack items="React.js, Node.js, MongoDB, Express.js, Zustand, GitHub" />
+
+**VIR Bike Store** — [Live](https://www.virbike.com/)
+
+Production e-commerce for premium e-cycles: catalog, specs, test-ride requests.
+
+**VIR Bike Chatbot**
+
+WhatsApp support for purchases, pricing, tracking, CRM, and payments.
+
+**CalcAI** — [Live](https://calcai-rhae.vercel.app/) · [GitHub](https://github.com/Rhae-Shane/CalcAi)
+
+Calculator that mixes regular math with Gemini-powered problem solving.
+
+<CalcAiPipeline />
+
+<TechStack items="React.js, Typescript, Python, Gemini" />
+
+<LinesBG />
+
+## Education
+
+**B.E.** — Army Institute of Technology, Pune (Aug 2023 – Present). CGPA 8.56/10.
+
+**Delhi Public School, Gurugram** (2020 – 2022).
+
+<LinesBG />
+
+## Skills
+
+**Languages:** JavaScript, TypeScript, Python, Java, SQL
+
+**Frontend:** React, Next.js, React Native, Tailwind CSS
+
+**Backend & databases:** Node.js, Express, REST, GraphQL, WebSockets, PostgreSQL, MongoDB, Redis
+
+**AI / GenAI:** LangChain, LangGraph, LangSmith, RAG, vector databases
+
+**Cloud & DevOps:** AWS, Docker, Kubernetes, Nginx, Linux, Git, GitHub Actions, Prometheus, Grafana
+
+<LinesBG />
+
+## Achievements
+
+- IIT Bombay Techfest (1st) · Build on Aptos (2nd) · BUILDAITHON 2024 Winner · AlgoHack Bangalore Special Mention ($60) · Aavishkar National Finalist
+- Mathematics Olympiad AIR 36 · Science Olympiad AIR 1204 · JEE Advanced AIR 8609
+
+<LinesBG />
+
+## Let's Connect
+
+If you want to talk about AI products, mobile, or internships — email me.
