@@ -1,0 +1,75 @@
+---
+title: "SuperKalam — features shipped"
+description: "Stories, DNA, Learn / quizzes, and chat image RAG — intern work written as product features."
+---
+
+SuperKalam (YC W23) is the AI mentor UPSC students actually use — app, web dashboard, chat, and daily news. I interned fullstack and shipped these features end to end, not tickets in one layer.
+
+## Feature: Home stories (app + web)
+
+A campaign surface on Home (Teachers' Day first). Same player on mobile and web — one Rive runtime, not two UIs.
+
+- Opens from Home; each page is a Rive animation
+- Progress bar is the real animation length
+- Hold to pause, haptics, swipe to close
+- Free vs Super see different last slides and CTAs
+- Web is a microfrontend of the same HTML/Rive shell the app embeds
+
+**Stack:** React Native, Reanimated, Rive, Next.js
+
+## Feature: DNA — daily news analysis
+
+Morning papers in, UPSC-ready articles and a branded PDF out. I owned the path.
+
+**Student**
+
+- Daily feed from Indian Express, The Hindu, PIB
+- Each article: description, syllabus tags, structured summary
+- Daily PDF + a PDF per article, QR back into News
+
+<DnaPipeline />
+
+1. **Intake** — e-paper / scrape. IE pages go through Gemini OCR (UPSC headlines first, then full article). URL date vs today IST so yesterday’s edition cannot publish as today
+2. **LLM** — Gemini + web search writes Key Highlights, Detailed Insights, Key Concepts; title, subject, tags
+3. **CMS** — editors publish in Strapi (`dna-summaries`). Reorder, edit, unpublish. Webhooks sync the app DB
+4. **PDF** — publish writes the day’s JSON to S3 → WeasyPrint (Jinja → daily + article PDFs) → CloudFront
+
+**Stack:** Gemini, LangChain, BullMQ, Strapi, WeasyPrint, S3, CloudFront
+
+## Feature: Learn, quizzes, PYQs (web)
+
+Learn was app-only. I brought the same journey to the web dashboard so a student can read and quiz on laptop and continue on phone.
+
+- Lesson reader, in-lesson quizzes, unit journey
+- Locked units + Super upgrade modal
+- MCQ practice on the same APIs as the app
+- Prelims and Mains PYQs — related questions, FAQ, JSON-LD
+
+**Stack:** Next.js, React Native, shared question APIs
+
+## Feature: Chat image RAG + coverage tool
+
+Diagrams inside Kalam AI chat, plus an internal tool so the content team can see what is missing.
+
+<ImageRagPipeline />
+
+**Insert**
+
+- Internal uploader (replaced the old notebook + watermark script)
+- Caption, subject, keywords → resize, SuperKalam watermark, WebP
+- S3 + OpenAI `text-embedding-3-large` → Qdrant `image_search`
+- Think Diagram can generate the figure first (Gemini prompt → image → watermark), then the same insert path
+
+**Extract**
+
+- Student asks in chat → same embedding → Qdrant search → figure attached to the answer
+
+**Coverage (internal)**
+
+- % by subject → unit → lesson
+- Lessons with zero images, concept gaps
+- Editors insert what is missing instead of guessing the bank is full
+
+**Stack:** S3, OpenAI embeddings, Qdrant, Gemini, Next.js internal app
+
+<TechStack items="React Native, Next.js, Rive, Typescript, Python, Gemini, LangChain, OpenAI, Qdrant, Strapi, WeasyPrint, Amazon S3, CloudFront" />

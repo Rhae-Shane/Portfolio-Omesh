@@ -1,0 +1,47 @@
+---
+title: "Homi — AI Engineer Intern"
+description: "Red Pen evaluation for handwritten maths, curriculum-aware RAG, and step-by-step AI solutions."
+---
+
+Homi (by SuperKalam) is an AI companion for school maths. I work on the evaluation and retrieval layer — the part that decides whether a child's working is right, and what to say next.
+
+## The problem
+
+A typed answer is easy to grade. A photo of a notebook is not. Homi has to read handwriting, follow the student's steps, and give feedback a teacher would actually write in the margin — not "incorrect, try again."
+
+## Red Pen evaluation
+
+Red Pen is the pipeline that scores handwritten maths solutions and writes contextual feedback.
+
+<HomiRedPenPipeline />
+
+- Intake: photo or scan of the working, plus the expected problem from the curriculum
+- Recognition: extract steps, not just a final number, so a correct method with an arithmetic slip is not treated as a blank
+- Scoring: compare the student's path to the canonical solution and known alternate methods
+- Feedback: generate a red-pen note that points at the exact step that broke, in language a school student can use
+
+The output is not a binary mark. It is a short teacher comment: where they went wrong, what to retry, and whether the method was sound.
+
+## Curriculum-aware RAG
+
+Generic chat will happily solve a problem with a method the class has not been taught yet. That is worse than no help.
+
+<HomiRagPipeline />
+
+- Implemented RAG over Homi's maths corpus so retrieval stays inside the current board, class, and chapter
+- Chunked worked examples and explanations so a query for "linear equations" does not pull Class 10 identity proofs
+- Step-by-step solutions that reuse the retrieved method instead of inventing a new one
+- Fallback when retrieval is thin: refuse a confident-but-off-syllabus proof rather than hallucinate a textbook
+
+## What I actually ship
+
+<HomiLangGraphPipeline />
+
+- Python services that sit behind the Homi app: evaluate, retrieve, explain
+- LangGraph graphs for the evaluate → retrieve → write-feedback path, so a failed OCR step does not silently become a wrong mark
+- Postgres for problem metadata, syllabus maps, and evaluation traces we can replay
+- Tuning prompts and retrieval filters with the content team when a chapter starts leaking into another
+
+The work is quiet compared with a landing page. It is also the product. If Red Pen is wrong twice, a parent does not come back.
+
+<TechStack items="Python, LangGraph, RAG, PostgreSQL, Gemini" />

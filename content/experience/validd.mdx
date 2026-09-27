@@ -1,0 +1,111 @@
+---
+title: "Validd — founding engineer, full product"
+description: "Built the investment platform end to end: mobile, web (separate repos), payments on 3 products, KYC, push, Supabase, admin."
+---
+
+Validd ([validd.in](https://validd.in)) is a SEBI-registered investment advisor. I was founding engineer — I built the product, not a slice of it. Mobile app, web (four Next apps in their own repos inside a Turbo monorepo), AI advisor, admin, payments, KYC, push, and the data layer. **120K MRR in 3 months**, **73K+ monthly AI interactions**.
+
+Three paid products on one account: **equity tips**, **managed portfolio**, **F&O tips** — plus AI chat on top.
+
+## Mobile app
+
+React Native / Expo — [Play Store](https://play.google.com/store/apps/details?id=in.validd.app) and [App Store](https://apps.apple.com/app/id6756005142).
+
+- **Home** — Nifty / Sensex bar, buy-sell-hold search, hubs for Wealth Portfolio, Equity Tips, F&O Tips
+- **Research** — stock, ETF, MF detail with historical pagination
+- **F&O** — live trades: legs, entry/exit, points, qty, net P&L
+- **Portfolio** — value vs Nifty, increase / buy / decrease / exit, allocation donut (stocks, MFs, ETFs, cash), holdings
+- **Alerts** — feed, search, filters, take-action sheet
+- **AI advisor** — text, speech-to-text, video, inline player, listening equalizer
+- **Pay + KYC** — Cashfree autopay, then DigiLocker
+- Deep links (trades, search, channels); install attribution (Play Referrer, Apple Search Ads, UTM) synced on login
+- PostHog session replay + Sentry
+
+## Web (separate repos)
+
+The site was one Next app and it broke when we split. I moved frontend into a **Turbo monorepo** — four apps, four deploys, one nginx hostname.
+
+<ValiddTurboSplit />
+
+- **static** — marketing: OTP login, product showcase, advisor demo, FAQs, SEBI / legal
+- **blogs** — content, with Strapi revalidate on publish
+- **deeplink** — universal links into the app
+- **dashboard** — investor web, aligned with mobile Home
+- shared **packages** — common, db, ui, lint / TypeScript / Tailwind
+
+I set server routes and deploy myself: an /api proxy to Express (no CORS), Groww / SIF off that proxy, and a local gateway on port 3000 that matches prod nginx. Self-hosted beta + prod: the Action builds in the workspace, then an atomic swap of the Next output and node_modules, then PM2 reload — checkout used to delete the live build mid-deploy.
+
+<ValiddDeployPipeline />
+
+Also on web: [SIF tracker](https://validd.in/specialized-investment-fund-tracker), stock-tips ads landing, SIP / lumpsum / CAGR calculators, JSON-LD + 301s, PostHog + Clarity.
+
+## Payments — same stack on 3 products
+
+Equity, portfolio, and F&O each have their own plan, but one Cashfree integration.
+
+<ValiddPayKycPipeline />
+
+- Orders, subscriptions, **multi-autopay**, reconcile jobs
+- Webhook fulfillment is idempotent so a retry cannot double-extend a plan
+- After pay: KYC, then Novu topic tags so the next push is for the product they bought
+- Admin can see payments and failed reconciles
+
+## KYC
+
+- DigiLocker after first successful payment
+- Blocks advisory surfaces until KYC is done (SEBI)
+- Status lives on the user in Supabase; app and dashboard both read it
+
+## Push notifications (separate project)
+
+Cut over from OneSignal to **self-hosted Novu** (own host, own box — not a plugin inside the app repo).
+
+<ValiddNovuPipeline />
+
+- FCM data messages; the app draws the tray via Notifee with the Validd icon and a trade sound, so Android does not show a grey default
+- Topics: Equity / Portfolio / F&O, plus premium / free / active / engaged / inactive — updated on every plan change
+- Admin still uses the old OneSignal segment names; API maps them to Novu so broadcast screens did not have to be rewritten
+- STOCKSYNC market alerts and the AI service fire the same topics
+- Token cap 100 devices per subscriber
+
+## Supabase (data layer)
+
+Separate from the Next apps. Source of truth for users, plans, and realtime.
+
+<ValiddDataPipeline />
+
+- Auth + Postgres: subscriptions, staff seats, active-days, holdings
+- Migrations I wrote for those tables
+- Realtime channels for AI chat (last 24h of messages as memory)
+- Crons: LTP + MF NAVs, portfolio vs Nifty, strategy backfills, candle analysis, engagement pushes
+- PROD → BETA clone with a schema safety check
+
+## Admin (internal tool)
+
+A full internal Next app for sales and research — not a thin CMS.
+
+- **Roles** — admin, manager, sales; nested lead ownership
+- **Leads CRM** — UTM, click IDs, store attribution, ads match-quality
+- **Users** — state, timeline, team activity, payment analytics
+- **Push consoles** — stock / F&O / portfolio, broadcast + segment (Novu)
+- **Research** — portfolio strategies, questions, version prepare / compare / release
+- **Ops** — payments, stories, AI chat channels, health page
+
+## AI advisor
+
+LangGraph (TypeScript) on Supabase realtime.
+
+<ValiddAdvisorPipeline />
+
+- Router: greeting, stock Q, web search, proprietary research, off-topic
+- Tools: NSE ideas, Multyfi candles, live snapshot fallback
+- Unpaid users: paywall + rotating voice clips
+- Trade alerts out through Novu
+- LangSmith traces
+
+## CMS + infra
+
+- **Strapi 5** self-hosted (Postgres + PM2) for blogs and marketing content
+- Self-hosted runners: lint → typecheck → test → single-app or all-four deploy
+
+<TechStack items="React Native, Expo, Next.js, Turbo, Typescript, Node.js, LangGraph, LangSmith, Supabase, PostgreSQL, Novu, FCM, Notifee, Strapi, Cashfree, DigiLocker, PostHog, Sentry, Docker, PM2" />

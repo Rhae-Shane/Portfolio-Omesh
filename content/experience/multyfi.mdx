@@ -1,0 +1,37 @@
+---
+title: "Multyfi — Software Engineer Intern"
+description: "Investor features, live market data, and recommendation delivery on a platform with 75K+ downloads."
+---
+
+Multyfi is an investor app for equity, derivatives, and commodity ideas. I interned on the product that sits between research and the person who has to act on it — the screens, the feed, and the notifications.
+
+## What I owned
+
+- Stock recommendation strategies and the investor-facing surfaces that show them
+- Real-time market data so a tip is not stale by the time someone opens the app
+- Recommendation delivery and notification workflows across equity, F&O, and commodities
+- Client flows that a 75K+ download base actually uses: watchlists, idea cards, and follow-through after a push
+
+## Recommendations
+
+Research is useless if it lands as a paragraph. I worked on how a tip is packaged: instrument, bias, entry, and why — then how it shows up in the feed versus a push.
+
+- Idea cards that stay readable on a phone
+- Strategy tags so a user can follow one desk without drowning in every product
+- Delivery that does not double-fire when a job retries
+
+## Live market data
+
+- Wired live prices and candles into the recommendation views
+- Cached the hot path so a feed scroll does not hammer the broker APIs
+- Fallback when a candle source is down so the card still opens
+
+## Notifications
+
+- Workflows for equity, derivatives, and commodity desks
+- Quiet hours and product filters so a commodity ping does not wake an equity-only user
+- Deep links from the notification into the exact idea, not the home screen
+
+The internship was long enough to see the same user come back after a bad fill. That is why the data path and the notification path had to agree.
+
+<TechStack items="React.js, Node.js, REST APIs, Redis" />
