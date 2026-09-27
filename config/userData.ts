@@ -9,7 +9,7 @@ const userData: UserData = {
     twitter: "https://x.com/Omesh_RaoSahab",
     linkedin: "https://www.linkedin.com/in/omeshxkumar/",
     resume:
-      "https://drive.google.com/file/d/1mnzX8v5SFz7llZeNAA62iS9-MC5sgbcS/view?usp=sharing",
+      "https://drive.google.com/drive/folders/12nGArfe3KykR4GBo712wc3Ze2-16t5fV",
     cal30: "https://cal.com/omeshkumar/30min",
     cal45: "https://cal.com/omeshkumar/45min",
   },
