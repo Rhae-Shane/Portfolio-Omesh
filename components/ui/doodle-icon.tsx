@@ -424,12 +424,6 @@ const ICONS: Record<string, React.ReactNode> = {
       <path d="M9 12h6M12 8v8" />
     </Doodle>
   ),
-  pm2: (
-    <Doodle title="PM2">
-      <rect x="4" y="7" width="16" height="10" rx="2" />
-      <path d="M8 12h3M14 10v4" />
-    </Doodle>
-  ),
   openai: (
     <Doodle title="OpenAI">
       <circle cx="12" cy="12" r="3" />
