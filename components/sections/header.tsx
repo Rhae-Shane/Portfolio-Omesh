@@ -5,7 +5,6 @@ import { GithubIcon, LinkedInIcon, XIcon } from "../icons";
 import SoundToggle from "../sound-toggle";
 import { ThemeToggle } from "../theme-toggle";
 import { Button } from "../ui/button";
-import { ConnectButtons } from "../ui/connect-links";
 
 const Header = () => {
   const { name, profession, github, twitter, linkedin } = userData.personalInfo;
@@ -50,7 +49,6 @@ const Header = () => {
                 <XIcon className="size-4" />
               </Link>
             </Button>
-            <ConnectButtons className="hidden sm:flex" />
             <SoundToggle />
             <ThemeToggle />
           </div>

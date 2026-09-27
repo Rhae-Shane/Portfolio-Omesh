@@ -70,10 +70,6 @@ const About = () => {
           </div>
 
           <div className="mt-6">
-            <ConnectCopy />
-          </div>
-
-          <div className="mt-6">
             <div className="text-muted-foreground leading-relaxed">
               Hackathons: IIT Bombay Techfest (1st), Build on Aptos (2nd), BUILDAITHON 2024 Winner, AlgoHack Bangalore (Special Mention), Aavishkar National Finalist. JEE Advanced AIR 8609.
             </div>
@@ -110,6 +106,10 @@ const About = () => {
                 <ArrowUpRightIcon className="size-2.5 shrink-0" />
               </Link>
             </div>
+          </div>
+
+          <div className="mt-6">
+            <ConnectCopy />
           </div>
         </div>
       </div>
