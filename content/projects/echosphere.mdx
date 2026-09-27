@@ -1,0 +1,42 @@
+---
+title: "Echosphere — AI property ops"
+description: "Residents, owners, and technicians on one platform. Voice and chat become structured tickets through Gemini, then route to the right trade with WhatsApp updates."
+---
+
+Echosphere is a property-management platform for **residents**, **owners**, and **technicians**. The product is a Vite React app plus an Express API on Prisma / Postgres. I built the role system, the ticket workflows, and the AI intake that turns a phone call into a typed, prioritized job.
+
+<EchospherePipeline />
+
+## Roles
+
+- **Resident** — report issues, request services, see community events
+- **Owner** — approve services, assign staff, watch PG / community analytics
+- **Technician** — take assigned jobs, upload progress, close the loop
+
+## Issues vs services
+
+Two different state machines, not one generic ticket.
+
+- **Issues** — plumbing, electrical, HVAC, security, internet, appliances, structural, pest. Priority **P1 → P4**. Flow: Pending → Assigned → In Progress → Resolved. Photos on Cloudinary.
+- **Services** — cleaning, repair, maintenance, installation, inspection. Flow: Pending → **Awaiting Approval** → Approved → Assigned → In Progress → Completed. Owner must approve before a technician is assigned.
+
+## Voice intake
+
+Voice is a first-class intake, not a demo widget.
+
+- A call lands with a recording, transcript, and extracted variables (description, location, type)
+- **Gemini** decides: is this an issue or a service, which category, which priority, which `TechnicianField`
+- Invalid / thin transcripts are rejected with a reason instead of opening a junk ticket
+- The matching technician is assigned; WhatsApp (`whatsapp-web.js`) pings status from there
+
+## Stack
+
+- **Client** — React 19, Vite, Tailwind, Zustand, Radix / shadcn, Framer Motion, Spline hero
+- **API** — Express 5, JWT, Zod, Helmet, Prisma, Postgres, Redis
+- **Media** — Multer → Cloudinary
+- **Messaging** — WhatsApp Web.js + QR pairing for the property desk
+- **AI** — `@google/genai` for classify + event suggestions
+
+Owner dashboards also get PG community analytics and Gemini-suggested events so the product is not only break/fix.
+
+<TechStack items="React.js, Vite, Typescript, Zustand, Express.js, PostgreSQL, Prisma, Redis, Gemini, Cloudinary, WhatsApp, Zod" />

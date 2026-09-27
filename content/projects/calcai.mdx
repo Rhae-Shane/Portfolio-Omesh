@@ -1,0 +1,20 @@
+---
+title: "CalcAI — local math + Gemini"
+description: "Calculator that parses regular expressions locally and sends natural-language / hard problems to Gemini. React + TypeScript front, Python back."
+---
+
+CalcAI is a calculator that does not pretend every keystroke needs a model. Regular math stays on device. Natural-language and hard problems go to **Gemini**. History keeps both traces.
+
+[Live](https://calcai-rhae.vercel.app/) · [GitHub](https://github.com/Rhae-Shane/CalcAi)
+
+<CalcAiPipeline />
+
+## Flow
+
+- Input from the pad or a typed question
+- Parser decides: closed-form math vs “ask”
+- Local path evaluates immediately
+- Gemini path returns a worked solution, then stores the pair in history
+- React + TypeScript UI; Python service for the model call
+
+<TechStack items="React.js, Typescript, Python, Gemini" />

@@ -1,0 +1,21 @@
+---
+title: "Pull-Quest — contribution quality, not PR count"
+description: "Open-source ranking. Maintainers score PRs; Mongo stores quality apart from volume; recruiters see a LeetCode-style profile."
+---
+
+Pull-Quest (Aptos hackathon) ranks **open-source work by review quality**, not green-square volume. Contributors get a profile. Maintainers judge the PR. Recruiters see outcome.
+
+[Frontend](https://github.com/Rhae-Shane/Aptos-PullQuest-Frontend)
+
+<PullQuestPipeline />
+
+## Flow
+
+- GitHub PR lands on a tracked repo
+- Maintainer writes a **quality score** (review depth, merge outcome) — not “+1 for existing”
+- Mongo stores that score **apart from** raw PR count
+- Ranked profile is LeetCode-shaped: history, score, signal a recruiter can read in one screen
+
+Client is React + Zustand. API is Express REST. Auth and repo webhooks sit on the Node layer.
+
+<TechStack items="React.js, Typescript, Zustand, Node.js, Express.js, MongoDB, REST APIs, GitHub" />

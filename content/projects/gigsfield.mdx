@@ -1,0 +1,49 @@
+---
+title: "Gigsfield — AI workflow canvas + serverless engine"
+description: "Node-based creative platform: Next.js canvas on the front, AWS Step Functions on the back. Flux, Veo, Kling, Gemini — campaigns at catalogue scale."
+---
+
+Gigsfield ([gigsfield.com](https://gigsfield.com)) is an AI workflow platform for teams that want to own their creative pipelines. I worked across the **Next.js canvas** (`gigs-frontend`) and the **AWS engine** (`gigs-field`) — the same graph a designer draws is the state machine that runs overnight.
+
+<GigsfieldPipeline />
+
+## Canvas (frontend)
+
+Next.js App Router, React 19, **xyflow** node editor. Auth and orgs through **Clerk**. Data through TanStack Query; editor state through Redux. Credits and billing through **Razorpay**.
+
+- **Node canvas** — wire text, image, image-to-image, video, and lipsync nodes. Each node shows a credit badge before you run
+- **Workspaces** — first-workspace onboarding, org-scoped graphs, role-based review
+- **Campaigns** — drop a CSV of SKUs, run the same graph across a catalogue, QC before download
+- **Entity library** — products, talent, brand kits; bulk ingest from Drive
+- **Apps + share** — publish a graph as a one-click app; public community links
+- Landing / SEO pages per vertical (fashion, jewellery, ads, food) so the marketing site is generated from the same model catalogue as the editor
+- PostHog + Sentry on the Next app
+
+## Engine (gigs-field)
+
+Serverless orchestration. The canvas POSTs a graph; API Gateway starts a **Step Functions** execution; each node is a Lambda.
+
+- **API Gateway** — create/execute, status by execution ARN, `/models/image` and `/models/video`
+- **Step Functions** — dynamic state machine; sequential by default, parallel when enabled
+- **Lambda** — image, video, text, lipsync, and image-to-image processors
+- **DynamoDB** — workflow snapshot + execution rows
+- **S3** — generated stills and clips (`async-workflow-outputs-gigs`)
+
+Model fan-out (config-driven from `/models/config`, not hardcoded in the UI):
+
+- **Image** — Flux Dev/Pro/Schnell, Ideogram v3, Imagen 4, HiDream, GPT image
+- **Video** — Kling 2.1 / 1.5, Seedance Pro/Lite, Veo 3, Flash Edit
+- **Image-to-image** — Flux Kontext (Pro / Max / Dev), Race Stabilizer
+- **Text** — Gemini + GPT for prompt enhancement before a gen node
+
+Writes back are surgical: `output_updater` patches `nodes[i].outputValues` on the live workflow so a long run does not overwrite edits made while it was in flight.
+
+## Credits and campaigns
+
+<GigsfieldCreditsPipeline />
+
+- Every node type has a credit cost; the canvas shows it before execute
+- Razorpay top-up; debit happens on the engine when the node actually runs
+- Campaigns expand one graph × N CSV rows into N executions, same QC gate
+
+<TechStack items="Next.js, Typescript, React Flow, TanStack Query, Redux, Clerk, Razorpay, AWS, Step Functions, Lambda, DynamoDB, Amazon S3, Gemini, PostHog, Sentry" />

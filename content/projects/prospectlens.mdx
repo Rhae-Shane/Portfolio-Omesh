@@ -1,0 +1,63 @@
+---
+title: "ProspectLens — research fan-out + 10-section briefing"
+description: "LangGraph sales research copilot. Planner fans queries across six providers in parallel, hybrid QC recovers gaps, then a 10-section report fans out again. pgvector RAG for follow-up chat."
+---
+
+ProspectLens is a sales research copilot. A session is a company + objective. FastAPI runs a compiled LangGraph (`graph.astream`) as a background task; the React app watches it over SSE. Persistence is Postgres + pgvector; Redis caches research, node outputs, and chat context.
+
+The graph is seven nodes — the interesting part is the **fan-out**, not a single LLM call.
+
+<ProspectLensPipeline />
+
+## Graph
+
+`planner → research → analyze → quality_check → (recovery → research)* → report_generator → report_validation`
+
+Shared `ResearchState`: session metadata, raw research, analysis, `section_coverage`, quality score, recovery hints, token/cost.
+
+- **Planner** — OpenAI turns company + objective into targeted queries
+- **Research** — `asyncio.gather` across providers
+- **Analyze** — structured signals, ICP, competitors, risks
+- **Quality check** — deterministic coverage + LLM score
+- **Recovery** — gap-only queries, not a full re-fan-out
+- **Report** — 10 parallel section LLM calls
+- **Validate** — coverage fixes, unknowns, normalize
+
+QC routing: `quality_score >= 0.75` **or** `retry_count >= 2` → report. Else recovery → research again.
+
+## Research fan-out
+
+First pass gathers in parallel. Failed / thin payloads are sanitized so they never reach analyze.
+
+- **Perplexity** — cited web research
+- **Tavily** — supplemental search
+- **Firecrawl** — sitemap, scrape, crawl on the company site
+- **Apollo** — firmographics (founded, HQ, employees, funding)
+- **NewsAPI** — recent articles
+- **ProductHunt** — launch / product signals
+
+On a QC retry the expensive providers are skipped; only the gap queries run. Redis `research:{hash}` (24h) skips duplicate provider calls.
+
+## Checkpoint + resume
+
+`AsyncPostgresSaver` — `thread_id` is the session UUID.
+
+- **Run / retry** — clear the thread, start at planner
+- **Resume** — `astream(None)` from the last checkpoint; planner/research do not re-run
+- Mid-run crash keeps the checkpoint. Finalize-only resume if the graph already hit END but RAG/save failed
+
+SSE + `workflow_events` stream every node. LangSmith when tracing is on.
+
+## Report fan-out
+
+<ProspectLensReportFanout />
+
+`report_pipeline` extracts Apollo + sources first, then **gathers ten section overviews in parallel** (company, products, customers, stakeholders, signals, risks, discovery, outreach, unknowns, sources). Merge + `normalize_report_content` → `reports.content` JSONB. Same payload drives the 10 dashboards, the full-view dialog, and print PDF.
+
+## Follow-up chat
+
+<ProspectLensChatPipeline />
+
+On complete: section-aware chunks (~1200 chars) embed with `text-embedding-3-small` into `report_rag_chunks` (1536-d). Chat boots from Redis `report_ctx` (7d) + pgvector `search_report`. Live tools only if the briefing is thin: Tavily, Apollo, NewsAPI, Perplexity, Firecrawl scrape — no full graph rerun.
+
+<TechStack items="React.js, Typescript, FastAPI, PostgreSQL, Redis, LangGraph, Firecrawl, OpenAI" />

@@ -1,0 +1,50 @@
+---
+title: "HobbyFlow — LangGraph learning paths"
+description: "Expo app + Express API. Creation chat, Groq→OpenRouter→Gateway plan cascade, just-in-time multimedia lessons, Ask tools, lazy daily tasks. Supabase JWT + RLS."
+---
+
+HobbyFlow turns “I want to learn guitar” into a **5–8 technique** path — not a YouTube dump. Mobile is Expo (`Hobbyflow-app`). API is Express + LangGraph (`Hobbyflow-backend`). Identity and rows live in **Supabase** (Auth + Postgres + RLS). The server only validates JWTs (JWKS) and runs AI with the service role where materialize needs it.
+
+[App](https://github.com/Rhae-Shane/Hobbyflow-app) · [Backend](https://github.com/Rhae-Shane/Hobbyflow-backend)
+
+<HobbyFlowPipeline />
+
+## Create a roadmap
+
+Every new hobby goes through **creation chat** before `POST /plans`.
+
+- LangGraph asks **4–5 MCQ** clarifications (chips or typed)
+- Goal card is editable; “LOOKS GOOD, CREATE ROADMAP” calls the plan pipeline
+- Prompt rules: min 5 / max 8 techniques, **no URLs** (search_query only), sequential order, allowed modalities for that hobby
+
+Plan pipeline:
+
+1. In-memory cache keyed by hobby + level + goal + time (24h)
+2. Prompt builder
+3. **Groq** (Llama 3.3) → **OpenRouter** free → **Vercel AI Gateway** (Gemini lite)
+4. Zod validate → normalizer → modality rules
+5. Persist roadmap nodes as `pending_content`
+
+Replace is a different action from skip: skip drops a technique; replace re-runs **one** technique against remaining names (409 if duplicate).
+
+<TechStack items="React Native, Expo, TanStack Query, Zustand, Node.js, Express.js, Typescript, LangGraph, Groq, Gemini, Supabase, PostgreSQL, Zod, LangSmith, Sentry, Docker, PM2" />
+
+## Just-in-time lessons
+
+<HobbyFlowLessonPipeline />
+
+Lessons are **not** generated at CREATE. Open a node → Generate → LangGraph builds pages (text + image + video + audio when modality allows) → YouTube / Google resolve → **Supabase Storage** (`lesson-media`) so the next open is the same assets → status `ready`.
+
+Client is offline-first: **TanStack Query** + AsyncStorage, hydrated against RLS after login.
+
+## Ask + daily tasks
+
+<HobbyFlowAskPipeline />
+
+**Ask Anything** is ChatGPT-style multi-thread (`workflow = ask_anything`). Tools read **this JWT user’s** profile, hobbies, roadmaps, streak, Pact, posts — never another user, never mutate.
+
+**Daily tasks** generate only when they tap **See today’s task**. Up to 2 regenerates. Rating once per calendar day. Bonus tasks after that do not raise rating. A day with no generate still **misses** (savers / −5, floor 699).
+
+Gamification around that: streak, leagues, Pact, social feed + hobby tags.
+
+<TechStack items="LangGraph, Groq, Supabase, Redis, TanStack Query, Expo, Sentry" />
