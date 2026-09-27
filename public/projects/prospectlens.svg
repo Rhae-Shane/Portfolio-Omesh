@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="ProspectLens">
+  <rect width="32" height="32" rx="8" fill="#111111"/>
+  <path
+    d="M19.2 9.2v12.2a3.1 3.1 0 1 0 3.1-3.1H9.7a3.1 3.1 0 1 0 3.1 3.1V9.2a3.1 3.1 0 1 0-3.1 3.1h12.6a3.1 3.1 0 1 0-3.1-3.1Z"
+    fill="none"
+    stroke="#F4F4F5"
+    stroke-width="2.1"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>
