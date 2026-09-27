@@ -1,0 +1,222 @@
+import type { UserData } from "@/types";
+
+const userData: UserData = {
+  personalInfo: {
+    name: "OMESH KUMAR",
+    profession: "Mobile Engineer Intern · SuperKalam (YC W23)",
+    email: "omeshkumar9813499778@gmail.com",
+    github: "https://github.com/Rhae-Shane",
+    twitter: "https://x.com/Omesh_RaoSahab",
+    linkedin: "https://www.linkedin.com/in/omeshxkumar/",
+    resume:
+      "https://drive.google.com/file/d/1mnzX8v5SFz7llZeNAA62iS9-MC5sgbcS/view?usp=sharing",
+    cal30: "https://cal.com/omeshkumar/30min",
+    cal45: "https://cal.com/omeshkumar/45min",
+  },
+  about:
+    "I'm a fullstack engineer interning at SuperKalam (YC W23) and Homi, building AI learning products. Before that I was founding engineer at Validd and shipped investor products at Multyfi and VIR Bike. Final-year ENTC at AIT Pune (CGPA 8.56).",
+  experience: [
+    {
+      id: 1,
+      role: "Mobile Engineer Intern (Fullstack)",
+      company: "SuperKalam",
+      startDate: "Jul 2026",
+      endDate: "Present",
+      link: "https://superkalam.com",
+      logoUrl: "/experience/superkalam.png",
+      logoBg: "bg-white p-1.5",
+      slug: "superkalam",
+      description:
+        "Shipped product features: Home stories (app + web), DNA (OCR → LLM → Strapi → PDF), Learn / quizzes / PYQs on web, and chat image RAG with an internal coverage tool.",
+    },
+    {
+      id: 2,
+      role: "AI Engineer Intern",
+      company: "Homi",
+      startDate: "Jul 2026",
+      endDate: "Present",
+      link: "https://heyhomi.in",
+      logoUrl: "/experience/homi.png",
+      logoBg: "bg-white p-0.5",
+      slug: "homi",
+      description:
+        "Developed AI pipelines for the Red Pen system to evaluate handwritten Maths solutions and generate contextual feedback.\nImplemented RAG pipelines for Maths content, enabling curriculum-aware retrieval and step-by-step AI solutions.",
+    },
+    {
+      id: 3,
+      role: "Founding Engineer",
+      company: "Validd",
+      startDate: "Dec 2025",
+      endDate: "Jul 2026",
+      link: "https://validd.ai",
+      logoUrl: "/experience/validd.png",
+      logoBg: "bg-black p-0",
+      slug: "validd",
+      description:
+        "Built the full product: mobile app, four web apps, admin, AI advisor. 120K MRR in 3 months.\nPayments on all 3 products (equity, portfolio, F&O), DigiLocker KYC, self-hosted Novu push, Supabase, staff CRM.",
+    },
+    {
+      id: 4,
+      role: "Software Engineer Intern",
+      company: "Multyfi",
+      startDate: "Dec 2024",
+      endDate: "Oct 2025",
+      link: "https://www.multyfi.com",
+      logoUrl: "/experience/multyfi.png",
+      logoBg: "bg-white p-1",
+      slug: "multyfi",
+      description:
+        "Designed stock recommendation strategies and investor-facing features for a platform with 75K+ downloads.\nDelivered real-time market data, recommendation delivery, and notification workflows for equity, derivatives, and commodity trading.",
+    },
+    {
+      id: 5,
+      role: "Campus Ambassador",
+      company: "Microsoft GroupMe",
+      startDate: "Feb 2025",
+      endDate: "Apr 2025",
+      link: "https://groupme.com/",
+      logoUrl: "/experience/microsoft.svg",
+      logoBg: "bg-white px-1 py-2",
+      slug: "microsoft-groupme",
+      description:
+        "Promoted GroupMe across campus and drove awareness and adoption among students.\nRan technical workshops and info sessions to showcase features and grow usage.\nCollaborated with peers and faculty to bring GroupMe into student communities.\nBuilt leadership, public speaking, and technical advocacy skills while representing Microsoft.",
+    },
+    {
+      id: 6,
+      role: "Software Engineer Intern",
+      company: "VIR Bike",
+      startDate: "Jul 2024",
+      endDate: "Nov 2024",
+      link: "https://www.virbike.com/",
+      logoUrl: "/experience/virbike.png",
+      logoBg: "bg-white p-0",
+      slug: "vir-bike",
+      description:
+        "Launched the company website and WhatsApp chatbot for bike purchases, order tracking, CRM integration, customer support, and payments, contributing to a 7 Cr funding round.\nBuilt the storefront so people could browse models, read specs, and request test rides.\nWorked across frontend and backend so the customer flow stayed smooth and scalable.",
+    },
+    {
+      id: 7,
+      role: "Technical Design Intern",
+      company: "KVtek",
+      startDate: "Jun 2024",
+      endDate: "Jul 2024",
+      link: "https://kvtekpower.com/",
+      logoUrl: "/experience/kvtek.png",
+      logoBg: "bg-white p-1",
+      slug: "kvtek",
+      description:
+        "Designed and optimized PCB layouts for electronic circuits using Altium, Eagle, and KiCad.\nContributed to embedded system development with microcontroller logic in Embedded C and Arduino.\nAssisted in prototyping and testing PCB + firmware integration for hardware development cycles.\nCreated technical schematics and documentation for engineering and R&D teams.",
+    },
+  ],
+  projects: [
+    {
+      title: "Gigsfield",
+      description:
+        "AI creative workflow platform: node canvas on Next.js wires Flux, Veo, Kling, and Gemini into campaigns. Clerk workspaces, Razorpay credits, and an AWS Step Functions engine that fans image/video jobs out to Lambda and S3.",
+      tags: [
+        "Next.js",
+        "React Flow",
+        "AWS",
+        "Step Functions",
+        "DynamoDB",
+        "Clerk",
+      ],
+      Livelink: "https://gigsfield.com",
+      gitHubLink: null,
+      imageSrc: "/projects/gigsfield.jpg",
+      date: "2026",
+      working: false,
+      slug: "gigsfield",
+    },
+    {
+      title: "Echosphere",
+      description:
+        "AI property platform for residents, owners, and technicians. Voice calls become structured tickets through Gemini, then route to the right trade with WhatsApp updates, Prisma, and owner-approval service workflows.",
+      tags: [
+        "React.js",
+        "Express.js",
+        "PostgreSQL",
+        "Prisma",
+        "Gemini",
+        "WhatsApp",
+      ],
+      gitHubLink: null,
+      imageSrc: "/projects/echosphere.svg",
+      date: "2025",
+      working: false,
+      slug: "echosphere",
+    },
+    {
+      title: "ProspectLens",
+      description:
+        "Sales research copilot. LangGraph planner fans queries across Perplexity, Firecrawl, Apollo, Tavily, NewsAPI, and ProductHunt in parallel. Hybrid QC recovers gaps; a 10-section report fans out again. pgvector RAG for follow-up chat.",
+      tags: [
+        "React.js",
+        "Typescript",
+        "FastAPI",
+        "PostgreSQL",
+        "Redis",
+        "LangGraph",
+      ],
+      gitHubLink: "https://github.com/Rhae-Shane/ProspectLens",
+      imageSrc: "/projects/prospectlens.svg",
+      date: "2026",
+      working: false,
+      slug: "prospectlens",
+    },
+    {
+      title: "HobbyFlow",
+      description:
+        "Duolingo-style AI app for learning anything through personalized paths. LangGraph agents on mobile improved retention by 45%; RAG with BullMQ, Redis, and web search cut irrelevant content by 60%. Offline-first with TanStack Query.",
+      tags: [
+        "React Native",
+        "TanStack Query",
+        "Node.js",
+        "Express.js",
+        "LangGraph",
+        "PostgreSQL",
+      ],
+      gitHubLink: "https://github.com/Rhae-Shane/Hobbyflow-app",
+      imageSrc: "/projects/hobbyflow.png",
+      date: "2026",
+      working: false,
+      slug: "hobbyflow",
+    },
+    {
+      title: "Pull-Quest",
+      description:
+        "Ranking-based open-source contribution platform. Contributors get a profile like LeetCode, maintainers can judge PR quality, and recruiters see real contribution signal — not just PR counts.",
+      tags: [
+        "React.js",
+        "Node.js",
+        "MongoDB",
+        "Express.js",
+        "Zustand",
+        "REST APIs",
+      ],
+      gitHubLink: "https://github.com/Rhae-Shane/Aptos-PullQuest-Frontend",
+      imageSrc: "/projects/pullquest.png",
+      date: "2025",
+      working: false,
+      slug: "pull-quest",
+    },
+    {
+      title: "CalcAI",
+      description:
+        "Intelligent calculator that mixes regular math with Gemini-powered problem solving, natural-language parsing, and history. React + TypeScript frontend, Python backend.",
+      tags: ["React.js", "Typescript", "Python"],
+      Livelink: "https://calcai-rhae.vercel.app/",
+      gitHubLink: "https://github.com/Rhae-Shane/CalcAi",
+      imageSrc: "/projects/calcai.png",
+      date: "2025",
+      working: false,
+      slug: "calcai",
+    },
+  ],
+  lastUpdated: {
+    date: "SEPTEMBER 27, 2026",
+    time: "06:20 PM IST",
+  },
+};
+
+export default userData;
