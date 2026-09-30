@@ -37,6 +37,8 @@ export interface Project {
   Livelink?: string;
   gitHubLink: string | null;
   imageSrc?: string;
+  /** Small mark for the work-page header. Falls back to imageSrc. */
+  logoSrc?: string;
   date: string;
   working?: boolean;
   slug?: string;

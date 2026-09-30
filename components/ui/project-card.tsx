@@ -30,18 +30,20 @@ const ProjectCard = ({
   slug,
 }: ProjectCardProps) => {
   return (
-    <div className="flex z-20 flex-col justify-between gap-1 rounded-xl bg-white hover:bg-white/70 dark:bg-background/50 dark:hover:bg-background/80 shadow-xs transition-all border border-dashed p-2 group">
+    <div className="flex z-20 self-start flex-col justify-between gap-1 rounded-xl bg-white hover:bg-white/70 dark:bg-background/50 dark:hover:bg-background/80 shadow-xs transition-all border border-dashed p-2 group">
       {imageSrc ? (
       <Image
         src={imageSrc}
         alt={title}
-        width={600}
-        height={600}
+        width={1024}
+        height={532}
         className={cn(
-          "w-full h-[13rem] rounded-lg transition-all duration-150 group-hover/projects:opacity-40 group-hover:!opacity-100",
-          imageSrc.endsWith(".svg") || imageSrc.includes("hobbyflow") || imageSrc.includes("prospectlens") || imageSrc.includes("echosphere")
-            ? "object-contain bg-muted/50 p-10"
-            : "object-cover object-top"
+          "w-full rounded-lg transition-all duration-150 group-hover/projects:opacity-40 group-hover:!opacity-100",
+          imageSrc.endsWith(".svg") || imageSrc.includes("hobbyflow") || imageSrc.includes("prospectlens")
+            ? "h-[13rem] object-contain bg-muted/50 p-10"
+            : imageSrc.includes("gigsfield-hero") || imageSrc.includes("echosphere-hero")
+              ? "h-auto object-contain"
+              : "h-[13rem] object-cover object-top"
         )}
       />
       ) : (

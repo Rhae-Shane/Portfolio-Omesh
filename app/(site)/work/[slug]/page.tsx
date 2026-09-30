@@ -61,6 +61,7 @@ export default async function WorkDetailPage({ params }: PageProps) {
 
   const toc = tocFromMdx(mdx.content);
   const crumb = exp?.slug ?? project?.slug;
+  const projectMark = project?.logoSrc ?? project?.imageSrc;
 
   return (
     <div
@@ -87,14 +88,17 @@ export default async function WorkDetailPage({ params }: PageProps) {
                   exp.logoBg ?? "bg-white p-1"
                 )}
               />
-            ) : project?.imageSrc ? (
+            ) : projectMark ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
-                src={project.imageSrc}
-                alt={`${project.title} cover`}
+                src={projectMark}
+                alt={`${project?.title ?? "Project"} cover`}
                 width={56}
                 height={56}
-                className="size-14 shrink-0 rounded-lg border object-cover bg-white"
+                className={cn(
+                  "size-14 shrink-0 rounded-lg border bg-white",
+                  project?.logoSrc ? "object-contain p-1.5" : "object-cover"
+                )}
               />
             ) : null}
             <div className="min-w-0 flex-1">
