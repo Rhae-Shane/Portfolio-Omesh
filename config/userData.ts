@@ -130,26 +130,6 @@ const userData: UserData = {
       slug: "gigsfield",
     },
     {
-      title: "Echosphere",
-      description:
-        "AI property platform for residents, owners, and technicians. Voice calls become structured tickets through Gemini, then route to the right trade with WhatsApp updates, Prisma, and owner-approval service workflows.",
-      tags: [
-        "React.js",
-        "Express.js",
-        "PostgreSQL",
-        "Prisma",
-        "Gemini",
-        "WhatsApp",
-      ],
-      Livelink: "https://echosphere-nu.vercel.app/",
-      gitHubLink: null,
-      imageSrc: "/projects/echosphere-hero.jpg",
-      logoSrc: "/projects/echosphere.svg",
-      date: "2025",
-      working: false,
-      slug: "echosphere",
-    },
-    {
       title: "ProspectLens",
       description:
         "Sales research copilot. LangGraph planner fans queries across Perplexity, Firecrawl, Apollo, Tavily, NewsAPI, and ProductHunt in parallel. Hybrid QC recovers gaps; a 10-section report fans out again. pgvector RAG for follow-up chat.",
@@ -202,6 +182,26 @@ const userData: UserData = {
       date: "2025",
       working: false,
       slug: "pull-quest",
+    },
+    {
+      title: "Echosphere",
+      description:
+        "AI property platform for residents, owners, and technicians. Voice calls become structured tickets through Gemini, then route to the right trade with WhatsApp updates, Prisma, and owner-approval service workflows.",
+      tags: [
+        "React.js",
+        "Express.js",
+        "PostgreSQL",
+        "Prisma",
+        "Gemini",
+        "WhatsApp",
+      ],
+      Livelink: "https://echosphere-nu.vercel.app/",
+      gitHubLink: null,
+      imageSrc: "/projects/echosphere-hero.jpg",
+      logoSrc: "/projects/echosphere.svg",
+      date: "2025",
+      working: false,
+      slug: "echosphere",
     },
     {
       title: "CalcAI",

@@ -84,11 +84,6 @@ const About = () => {
               />
               ,&nbsp;
               <TechBadge
-                tag="Echosphere"
-                href="/work/echosphere"
-              />
-              ,&nbsp;
-              <TechBadge
                 tag="ProspectLens"
                 href="/work/prospectlens"
               />
@@ -97,7 +92,12 @@ const About = () => {
                 tag="HobbyFlow"
                 href="/work/hobbyflow"
               />
-              , Pull-Quest, and CalcAI. Checkout&nbsp;
+              , Pull-Quest,&nbsp;
+              <TechBadge
+                tag="Echosphere"
+                href="/work/echosphere"
+              />
+              , and CalcAI. Checkout&nbsp;
               <Link
                 href="/design"
                 className="border-b cursor-pointer border-dashed border-foreground/60 text-foreground hover:text-primary transition-colors inline-flex items-center gap-0.5"
