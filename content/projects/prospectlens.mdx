@@ -54,6 +54,11 @@ SSE + `workflow_events` stream every node. LangSmith when tracing is on.
 
 `report_pipeline` extracts Apollo + sources first, then **gathers ten section overviews in parallel** (company, products, customers, stakeholders, signals, risks, discovery, outreach, unknowns, sources). Merge + `normalize_report_content` → `reports.content` JSONB. Same payload drives the 10 dashboards, the full-view dialog, and print PDF.
 
+<ShotGrid
+  columns="2"
+  items="/projects/prospectlens/company-overview.png|Company overview, /projects/prospectlens/products.png|Products and services, /projects/prospectlens/stakeholders.png|Stakeholders, /projects/prospectlens/business-signals.png|Business signals, /projects/prospectlens/risks.png|Risks and challenges, /projects/prospectlens/discovery-questions.png|Discovery questions"
+/>
+
 ## Follow-up chat
 
 <ProspectLensChatPipeline />
